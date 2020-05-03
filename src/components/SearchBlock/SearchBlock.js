@@ -1,22 +1,32 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { getRepos } from '../../redux/searchResults'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getRepos, cancelFetchingRepos } from '../../redux/searchResults'
 import './SearchBlock.sass'
 
 const SearchBlock = () => {
 	const dispatch = useDispatch()
 	const [inputVal, setInputVal] = useState('')
+	const { perPage, currentPage } = useSelector((state) => state.paginationReducer)
+	
+	useEffect(() => {
+		if (currentPage !== '') searchRepos()
+	}, [currentPage, perPage])
+	
+	function searchRepos() {
+		if (inputVal) {
+			dispatch(getRepos({
+				q: `in:name+${inputVal}`,
+				sort: 'stars',
+				order: 'desc',
+				per_page: perPage,
+				page: currentPage || 1
+			}))
+		}
+	}
 	
 	function handleFormSubmit(e) {
 		e.preventDefault()
-		
-		dispatch(getRepos({
-			q: `in:name+${inputVal}`,
-			sort: 'stars',
-			order: 'desc',
-			per_page: 30,
-			page: 1
-		}))
+		searchRepos()
 	}
 	
 	return (
@@ -42,6 +52,9 @@ const SearchBlock = () => {
 				</button>
 				<button
 					className={'search-block__btn-cancel'}
+					onClick={() => {
+						dispatch(cancelFetchingRepos())
+					}}
 				>
 					Cancel
 				</button>

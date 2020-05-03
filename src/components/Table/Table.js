@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React  from 'react'
-import { useTable, usePagination } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 import './Table.sass'
 
 const Table = ({
@@ -18,7 +18,7 @@ const Table = ({
     rows
   } = useTable(
     { columns, data },
-    usePagination
+    useSortBy
   )
 
   return (

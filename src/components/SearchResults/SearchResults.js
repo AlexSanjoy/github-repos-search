@@ -6,8 +6,6 @@ import Table from '../Table/Table'
 const SearchResults = () => {
 	const { repos } = useSelector((state) => state.searchResultsReducer)
 	
-	console.log(repos)
-	
 	const columns = useMemo(
 		() => [
 			{

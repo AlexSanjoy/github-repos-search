@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from 'redux-saga/effects'
+import { takeLatest, put, call, cancel, cancelled, fork, take, takeEvery } from 'redux-saga/effects'
 import RequestService from '../services/requestService'
 
 const REQUEST_REPOS = 'REQUEST_REPOS'
@@ -8,6 +8,7 @@ const GET_REPOS = 'GET_REPOS'
 
 const initialState = {
 	repos: [],
+	reposCount: 0,
 	loading: true,
 	error: false,
 }
@@ -20,9 +21,12 @@ const searchResultsReducer = (state = initialState, action) => {
 				loading: true
 			}
 		case REQUEST_REPOS_SUCCESS:
+			const totalCount = action.payload.total_count
+			
 			return {
 				...state,
-				repos: action.payload,
+				repos: action.payload.items,
+				reposCount: totalCount > 1000 ? 1000 : totalCount,
 				loading: false,
 			}
 		case REQUEST_REPOS_ERROR:
@@ -64,23 +68,37 @@ const getRepos = (payload) => {
 	}
 }
 
-function* watchFetchRepos() {
-	yield takeLatest('GET_REPOS', fetchReposAsync)
+const cancelFetchingRepos = () => {
+	return {
+		type: 'CANCEL_REQUEST',
+	}
 }
 
-function* fetchReposAsync({ payload }) {
+function* watchFetchRepos() {
+	yield takeLatest('GET_REPOS', function* ({ payload }) {
+		const task = yield fork(fetchReposAsync, payload)
+
+		yield take('CANCEL_REQUEST')
+		yield cancel(task)
+	})
+}
+
+function* fetchReposAsync(payload) {
 	try {
 		yield put(reposRequested())
-		const data = yield call(() => RequestService.fetchRepos(payload))
+		const data = yield call(RequestService.fetchRepos, payload)
 		
-		yield put(reposLoaded(data.data.items))
-	} catch (err) {
-		yield put(reposErrored(err))
+		yield put(reposLoaded(data.data))
+	} finally {
+		if (yield cancelled()) {
+			console.log('cancel')
+		}
 	}
 }
 
 export {
 	searchResultsReducer,
 	watchFetchRepos,
-	getRepos
+	getRepos,
+	cancelFetchingRepos
 }
