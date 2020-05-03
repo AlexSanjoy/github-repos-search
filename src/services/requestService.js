@@ -16,6 +16,7 @@ axios.defaults.paramsSerializer = function(params) {
 	return res
 }
 
+
 class RequestService {
 	asyncQuery = async (method, url, params) => {
 		let errors
@@ -24,7 +25,7 @@ class RequestService {
 			res = await axios({
 				method: method,
 				url: `${apiUrl}${url}`,
-				[method === 'get' ? 'params' : 'data']: params,
+				[method === 'get' ? 'params' : 'data']: params
 			})
 				.catch((error) => {
 					errors = error.response

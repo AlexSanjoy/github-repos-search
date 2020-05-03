@@ -70,7 +70,7 @@ const getRepos = (payload) => {
 
 const cancelFetchingRepos = () => {
 	return {
-		type: 'CANCEL_REQUEST',
+		type: 'CANCEL_REQUEST'
 	}
 }
 
@@ -86,9 +86,12 @@ function* watchFetchRepos() {
 function* fetchReposAsync(payload) {
 	try {
 		yield put(reposRequested())
+		
 		const data = yield call(RequestService.fetchRepos, payload)
 		
 		yield put(reposLoaded(data.data))
+	} catch (err) {
+		yield put(reposErrored(err))
 	} finally {
 		if (yield cancelled()) {
 			console.log('cancel')

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRepos, cancelFetchingRepos } from '../../redux/searchResults'
 import './SearchBlock.sass'
+import RequestService from '../../services/requestService'
 
 const SearchBlock = () => {
 	const dispatch = useDispatch()
@@ -52,6 +53,7 @@ const SearchBlock = () => {
 				</button>
 				<button
 					className={'search-block__btn-cancel'}
+					type={'button'}
 					onClick={() => {
 						dispatch(cancelFetchingRepos())
 					}}
