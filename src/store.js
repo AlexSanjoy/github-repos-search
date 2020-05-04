@@ -1,12 +1,13 @@
 import { applyMiddleware, createStore, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { combineReducers } from 'redux'
-import { searchResultsReducer, watchFetchRepos } from './redux/searchResults'
-import { paginationReducer } from './redux/pagination'
+import pagination from './redux/reducers/pagination.js'
+import searchResults from './redux/reducers/searchResults.js'
+import rootSaga from './redux/sagas'
 
 const rootReducer = combineReducers({
-	searchResultsReducer,
-	paginationReducer
+	searchResults,
+	pagination
 })
 
 const sagaMiddleware = createSagaMiddleware()
@@ -18,6 +19,6 @@ const store = createStore(
 	composeEnhancer(applyMiddleware(sagaMiddleware))
 )
 
-sagaMiddleware.run(watchFetchRepos)
+sagaMiddleware.run(rootSaga)
 
 export default store

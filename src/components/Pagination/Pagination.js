@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import './Pagination.sass'
 import { useDispatch, useSelector } from 'react-redux'
-import { perPageChange, currentPageChange } from '../../redux/pagination'
+import { perPageChange, currentPageChange } from '../../redux/actions/pagination.js'
 
 const Pagination = ({
 	perPageOptions
 }) => {
 	const dispatch = useDispatch()
-	const { perPage, currentPage } = useSelector((state) => state.paginationReducer)
-	const { reposCount, repos } = useSelector((state) => state.searchResultsReducer)
+	const { perPage, currentPage } = useSelector((state) => state.pagination)
+	const { reposCount, repos, currentRequestKey, loading } = useSelector((state) => state.searchResults)
 	const totalPagesCount = Math.ceil(reposCount / perPage)
 	
 	function handlePageChange(e) {
@@ -21,39 +21,42 @@ const Pagination = ({
 	
 	return (
 		<React.Fragment>
-			{repos.length ?
-			<div>
-				<div>
-					<span>Show on page:</span>
-					<select
-						value={perPage}
-						onChange={(e) => dispatch(perPageChange(e.target.value))}
-					>
-						{perPageOptions.map((item, key) => {
-							return (
-								<option value={item} key={key}>
-									{item}
-								</option>
-							)
-						})}
-					</select>
-				</div>
-				
-				<div>
-					<span>Page</span>
+			{repos[currentRequestKey] && repos[currentRequestKey].length ?
+				<section className={'pagination'}>
+					<div>
+						<span className={'pagination__label'}>Show on page:</span>
+						<select
+							className={'pagination__select'}
+							value={perPage}
+							onChange={(e) => dispatch(perPageChange(e.target.value))}
+							disabled={loading}
+						>
+							{perPageOptions.map((item, key) => {
+								return (
+									<option value={item} key={key}>
+										{item}
+									</option>
+								)
+							})}
+						</select>
+					</div>
 					
-					<input
-						type="number"
-						min={1}
-						max={totalPagesCount}
-						value={currentPage}
-						onChange={handlePageChange}
-					/>
-					
-					<span>of {totalPagesCount}</span>
-				</div>
-			</div> :
-			''}
+					<div>
+						<span className={'pagination__label'}>Page</span>
+						<input
+							className={'pagination__input'}
+							type="number"
+							min={1}
+							max={totalPagesCount}
+							value={currentPage}
+							onChange={handlePageChange}
+							disabled={loading}
+						/>
+						{totalPagesCount &&
+						<span className={'pagination__label'}>of {totalPagesCount}</span>}
+					</div>
+				</section> :
+				''}
 		</React.Fragment>
 	)
 }

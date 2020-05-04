@@ -2,20 +2,23 @@
 @import "./src/assets/styles/mixins"
 
 .search-block
-	+d-flex(center, center, column)
-	padding: 40px 15px
+	+section()
 	
+.search-form
+	+d-flex(center, center, column)
+
 	&__input
 		width: 100%
 		max-width: 500px
 		height: 40px
 		border-radius: 5px
-		border: 1px solid #aaa
+		border: 1px solid $border-color
 		padding: 0 10px
 		text-align: center
 		color: $text-color-primary
 		font-size: 18px
 		outline: none
+		transition: $transition-default
 		
 		&:focus,
 		&:active
@@ -23,12 +26,11 @@
 			box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2)
 		
 	&__buttons
-		margin-top: 25px
+		margin-top: 20px
 		+d-flex()
 		
 	&__btn-search
 		+button(#90caf9)
-		margin-right: 15px
 		
 	&__btn-cancel
 		+button(#f48fb1)

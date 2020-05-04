@@ -11,6 +11,12 @@
 	background: $color
 	transition: $transition-default
 	cursor: pointer
+	outline: none
+	
+	&:focus,
+	&:active
+		outline: none
+		background: darken($color, 10%)
 	
 	&:hover
 		background: darken($color, 5%)
@@ -25,3 +31,7 @@
 	justify-content: $justify
 	align-items: $align
 	flex-direction: $direction
+	
+@mixin section()
+	position: relative
+	padding: 30px 15px

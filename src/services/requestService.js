@@ -16,7 +16,6 @@ axios.defaults.paramsSerializer = function(params) {
 	return res
 }
 
-
 class RequestService {
 	asyncQuery = async (method, url, params) => {
 		let errors

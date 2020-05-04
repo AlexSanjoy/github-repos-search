@@ -6,9 +6,7 @@ import './Table.sass'
 const Table = ({
   className,
   columns,
-  data,
-  fetching,
-  fetchingErrors
+  data
 }) => {
   const {
     getTableProps,
@@ -22,51 +20,45 @@ const Table = ({
   )
 
   return (
-    <div className={'table-wrap'}>
-      {/*{fetching &&*/}
-      {/*  <Preloader relative={true} />}*/}
-      {fetchingErrors ?
-        // <Alert message={fetchingErrors} type={'error'} /> :
-        '' :
-        data.length ?
-          <table
-            className={'table ' + (className ? className : '')}
-            {...getTableProps()}
-          >
-            <thead className={'table-thead'}>
-            {headerGroups.map((headerGroup, i) => (
-              <tr key={i} className={'table__tr'} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column, i) => (
-                  <th key={i} className={'table__th'} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  <span className={"table__th-inner"}>
-                    {column.render('Header')}
-                  </span>
-                  </th>
-                ))}
-              </tr>
+    <React.Fragment>
+      {data.length ?
+      <table
+        className={'table ' + (className ? className : '')}
+        {...getTableProps()}
+      >
+        <thead className={'table-thead'}>
+        {headerGroups.map((headerGroup, i) => (
+          <tr key={i} className={'table__tr'} {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column, i) => (
+              <th key={i} className={'table__th'} {...column.getHeaderProps(column.getSortByToggleProps())}>
+              <span className={"table__th-inner"}>
+                {column.render('Header')}
+              </span>
+              </th>
             ))}
-            </thead>
-          
-            <tbody {...getTableBodyProps()}>
-            {rows.map((row, i) => {
-              prepareRow(row)
-              return (
-                <tr key={i} className={'table__tr'} {...row.getRowProps()}>
-                  {row.cells.map((cell, i) => {
-                    return (
-                      <td key={i} className={'table__td'} {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-            </tbody>
-          </table> :
-          <span className={'table__no-data'}>No data</span>
-      }
-    </div>
+          </tr>
+        ))}
+        </thead>
+      
+        <tbody {...getTableBodyProps()}>
+        {rows.map((row, i) => {
+          prepareRow(row)
+          return (
+            <tr key={i} className={'table__tr'} {...row.getRowProps()}>
+              {row.cells.map((cell, i) => {
+                return (
+                  <td key={i} className={'table__td'} {...cell.getCellProps()}>
+                    {cell.render('Cell')}
+                  </td>
+                )
+              })}
+            </tr>
+          )
+        })}
+        </tbody>
+      </table> :
+      ''}
+    </React.Fragment>
   )
 }
 

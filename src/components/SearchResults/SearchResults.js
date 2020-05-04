@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import Table from '../Table/Table'
-
+import Preloader from '../Preloader/Preloader'
+import './SearchResults.sass'
 
 const SearchResults = () => {
-	const { repos } = useSelector((state) => state.searchResultsReducer)
+	const { repos, currentRequestKey, loading, error } = useSelector((state) => state.searchResults)
 	
 	const columns = useMemo(
 		() => [
@@ -15,6 +16,7 @@ const SearchResults = () => {
 			{
 				Header: 'Description',
 				accessor: 'description',
+				Cell: ({ value }) => value || '---'
 			},
 			{
 				Header: 'Stars',
@@ -29,12 +31,23 @@ const SearchResults = () => {
 	)
 	
 	return (
-		<div>
-			<Table
-				columns={columns}
-				data={repos}
-			/>
-		</div>
+		<section className={'search-results'}>
+			{loading ?
+				<Preloader /> :
+				error ?
+					<p className={'search-results__error'}>{error}</p> :
+					repos[currentRequestKey] ?
+						repos[currentRequestKey].length ?
+							<div className={'search-results__table-wrap'}>
+								<Table
+									columns={columns}
+									data={repos[currentRequestKey] || []}
+								/>
+							</div> :
+							<p className={'search-results__no-data'}>--- No data ---</p> :
+						''
+			}
+		</section>
 	)
 }
 

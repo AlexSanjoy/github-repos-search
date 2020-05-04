@@ -5,11 +5,11 @@ import Pagination from '../../components/Pagination/Pagination'
 
 const SearchPage = () => {
 	return (
-		<div>
+		<React.Fragment>
 			<SearchBlock />
 			<Pagination />
 			<SearchResults />
-		</div>
+		</React.Fragment>
 	)
 }
 
