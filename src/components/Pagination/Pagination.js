@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React  from 'react'
 import PropTypes from 'prop-types'
 import './Pagination.sass'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,7 +9,7 @@ const Pagination = ({
 }) => {
 	const dispatch = useDispatch()
 	const { perPage, currentPage } = useSelector((state) => state.pagination)
-	const { repos, currentRequestKey, loading } = useSelector((state) => state.searchResults)
+	const { repos, currentRequestKey, loading, error } = useSelector((state) => state.searchResults)
 	const currentResults = repos[currentRequestKey]
 	const totalPagesCount = Math.ceil(currentResults && (currentResults.reposCount / perPage))
 	
@@ -22,7 +22,10 @@ const Pagination = ({
 	
 	return (
 		<React.Fragment>
-			{currentResults && currentResults.items && currentResults.items.length ?
+			{(!error &&
+			currentResults &&
+			currentResults.items &&
+			currentResults.items.length) ?
 				<section className={'pagination'}>
 					<div>
 						<span className={'pagination__label'}>Show on page:</span>

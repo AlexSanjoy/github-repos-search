@@ -33,7 +33,7 @@ class RequestService {
 			throw new Error(err)
 		}
 		
-		return res
+		return res || errors
 	}
 	
 	fetchRepos = (params) => this.asyncQuery('get', '/search/repositories', params)

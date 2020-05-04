@@ -34,16 +34,16 @@ const searchResults = (state = initialState, action) => {
 			}
 		
 		case REQUEST_REPOS_SUCCESS:
-			const { repos, reposCount, currentRequestKey } = action.payload
+			const { repos, currentRequestKey } = action.payload
 			
 			return {
 				...state,
 				loading: false,
+				error: false,
 				repos: {
 					...state.repos,
 					...repos
 				},
-				reposCount: reposCount,
 				currentRequestKey: currentRequestKey
 			}
 		
