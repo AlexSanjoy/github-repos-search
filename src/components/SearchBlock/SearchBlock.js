@@ -13,13 +13,13 @@ const SearchBlock = () => {
 		if (currentPage !== '') searchRepos()
 	}, [currentPage, perPage])
 	
-	function searchRepos() {
+	function searchRepos(page) {
 		const payload = {
 			q: `in:name+${inputVal}`,
 			sort: 'stars',
 			order: 'desc',
 			per_page: +perPage,
-			page: +currentPage || 1
+			page: +page || +currentPage || 1
 		}
 		const requestKey = btoa(JSON.stringify(payload))
 		
@@ -34,7 +34,7 @@ const SearchBlock = () => {
 	
 	function handleFormSubmit(e) {
 		e.preventDefault()
-		searchRepos()
+		searchRepos(1)
 	}
 	
 	return (

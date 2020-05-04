@@ -1,7 +1,7 @@
 import {
 	PER_PAGE_CHANGE,
 	CURRENT_PAGE_CHANGE,
-	CANCEL_FETCHING_REPOS
+	CANCEL_FETCHING_REPOS, GET_REPOS
 } from '../constants'
 
 const initialState = {
@@ -23,7 +23,7 @@ const pagination = (state = initialState, action) => {
 		case CURRENT_PAGE_CHANGE:
 			return {
 				...state,
-				prevCurrentPage: state.prevCurrentPage,
+				prevCurrentPage: state.currentPage,
 				currentPage: action.payload
 			}
 			
@@ -32,6 +32,13 @@ const pagination = (state = initialState, action) => {
 				...state,
 				perPage: state.prevPerPage,
 				currentPage: state.prevCurrentPage
+			}
+			
+		case GET_REPOS:
+			return {
+				...state,
+				perPage: action.payload.per_page,
+				currentPage: action.payload.page
 			}
 		
 		default:

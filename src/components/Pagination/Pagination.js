@@ -9,8 +9,9 @@ const Pagination = ({
 }) => {
 	const dispatch = useDispatch()
 	const { perPage, currentPage } = useSelector((state) => state.pagination)
-	const { reposCount, repos, currentRequestKey, loading } = useSelector((state) => state.searchResults)
-	const totalPagesCount = Math.ceil(reposCount / perPage)
+	const { repos, currentRequestKey, loading } = useSelector((state) => state.searchResults)
+	const currentResults = repos[currentRequestKey]
+	const totalPagesCount = Math.ceil(currentResults && (currentResults.reposCount / perPage))
 	
 	function handlePageChange(e) {
 		let val = e.target.value
@@ -21,7 +22,7 @@ const Pagination = ({
 	
 	return (
 		<React.Fragment>
-			{repos[currentRequestKey] && repos[currentRequestKey].length ?
+			{currentResults && currentResults.items && currentResults.items.length ?
 				<section className={'pagination'}>
 					<div>
 						<span className={'pagination__label'}>Show on page:</span>

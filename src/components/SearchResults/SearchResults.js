@@ -6,6 +6,7 @@ import './SearchResults.sass'
 
 const SearchResults = () => {
 	const { repos, currentRequestKey, loading, error } = useSelector((state) => state.searchResults)
+	const currentResults = (repos[currentRequestKey] && repos[currentRequestKey].items)
 	
 	const columns = useMemo(
 		() => [
@@ -16,7 +17,12 @@ const SearchResults = () => {
 			{
 				Header: 'Description',
 				accessor: 'description',
-				Cell: ({ value }) => value || '---'
+				Cell: ({ value }) => {
+					if (value) {
+						return value.length > 500 ? `${value.slice(0, 500)}...` : value
+					}
+					return '---'
+				}
 			},
 			{
 				Header: 'Stars',
@@ -36,12 +42,12 @@ const SearchResults = () => {
 				<Preloader /> :
 				error ?
 					<p className={'search-results__error'}>{error}</p> :
-					repos[currentRequestKey] ?
-						repos[currentRequestKey].length ?
+					currentResults ?
+						currentResults.length ?
 							<div className={'search-results__table-wrap'}>
 								<Table
 									columns={columns}
-									data={repos[currentRequestKey] || []}
+									data={currentResults || []}
 								/>
 							</div> :
 							<p className={'search-results__no-data'}>--- No data ---</p> :

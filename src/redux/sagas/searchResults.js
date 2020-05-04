@@ -20,9 +20,11 @@ function* fetchReposAsync(payload) {
 		if (data && data.statusText === 'OK') {
 			yield put(reposLoaded({
 				repos: {
-					[requestKey]: data.data.items
+					[requestKey]: {
+						items: data.data.items,
+						reposCount: data.data.total_count > 1000 ? 1000 : data.data.total_count
+					}
 				},
-				reposCount: data.data.total_count > 1000 ? 1000 : data.data.total_count,
 				currentRequestKey: requestKey
 			}))
 		} else {

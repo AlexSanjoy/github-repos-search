@@ -8,7 +8,6 @@ import {
 
 const initialState = {
 	repos: {},
-	reposCount: 0,
 	currentRequestKey: '',
 	loading: false,
 	error: false
